@@ -1,0 +1,50 @@
+name: Deploy portfolio
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: portfolio-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6.3.0
+        with:
+          role-to-assume: arn:aws:iam::289971515064:role/github-portfolio-deploy
+          aws-region: ap-southeast-2
+
+      - name: Upload homepage
+        run: |
+          aws s3 cp portfolio.html \
+            s3://joe-errington-portfolio/index.html \
+            --content-type "text/html" \
+            --cache-control "no-cache"
+
+      - name: Upload videos
+        run: |
+          if [ -d videos ]; then
+            aws s3 sync videos/ \
+              s3://joe-errington-portfolio/videos/ \
+              --cache-control "public,max-age=3600"
+          fi
+
+      - name: Refresh CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id E2V4NBGJFSYNK \
+            --paths "/*"
