@@ -75,7 +75,12 @@ jobs:
               s3://joe-errington-portfolio/videos/ \
               --cache-control "public,max-age=3600"
           fi
-
+      - name: Upload images
+        run: |
+          aws s3 sync images/ \
+            s3://joe-errington-portfolio/images/ \
+            --cache-control "public,max-age=3600"
+            
       - name: Refresh CloudFront cache
         run: |
           aws cloudfront create-invalidation \
