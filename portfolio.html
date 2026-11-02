@@ -5,9 +5,10 @@
     <script>
       // Restore the chosen theme before the page is painted.
       (() => {
-        let theme = 'light';
+        let theme = "light";
         try {
-          if (localStorage.getItem('portfolio-theme') === 'dark') theme = 'dark';
+          if (localStorage.getItem("portfolio-theme") === "dark")
+            theme = "dark";
         } catch (_) {}
         document.documentElement.dataset.theme = theme;
       })();
@@ -223,7 +224,9 @@
         top: 24%;
         width: 35%;
         height: 55%;
-        background: var(--accent);
+        background: var(--hero-block-color);
+        rotate: var(--square-turn, 0deg);
+        transition: rotate 650ms cubic-bezier(0.22, 1, 0.36, 1);
         transform: translateY(var(--block-shift, 0px)) rotate(-7deg);
         pointer-events: none;
       }
@@ -607,7 +610,7 @@
         color: #ffffff;
       }
       .platform-boostai {
-        background: #5643cc;
+        background: #ff3300;
         color: #ffffff;
       }
       .platform-sap {
@@ -648,18 +651,22 @@
         color: #ffffff;
       }
       .platform-salsify {
-        background: #00c4ff;
+        background: #8a25f9;
         color: #ffffff;
       }
 
       /* Theme tokens preserve brand colours in both modes. */
       :root {
+        --name-color: #274e13;
+        --hero-block-color: #808080;
         --nav-background: #f2f2f2eb;
         --focus-color: #274e13;
         --nav-hover: #274e13;
       }
       :root[data-theme="dark"] {
         color-scheme: dark;
+        --name-color: #f1f1e9;
+        --hero-block-color: #274e13;
         --ink: #121410;
         --paper: #f1f1e9;
         --muted: #b3b8ae;
@@ -682,20 +689,82 @@
         color: var(--paper);
         cursor: pointer;
       }
-      .theme-toggle svg { width: 20px; height: 20px; }
-      .theme-toggle .sun-icon { display: none; }
-      [data-theme="dark"] .theme-toggle .moon-icon { display: none; }
-      [data-theme="dark"] .theme-toggle .sun-icon { display: block; }
-      nav { align-items: center; }
-      .theme-toggle:hover { border-color: currentColor; }
+      .theme-toggle svg {
+        width: 20px;
+        height: 20px;
+      }
+      .theme-toggle .sun-icon {
+        display: none;
+      }
+      [data-theme="dark"] .theme-toggle .moon-icon {
+        display: none;
+      }
+      [data-theme="dark"] .theme-toggle .sun-icon {
+        display: block;
+      }
+      nav {
+        align-items: center;
+      }
+      .theme-toggle:hover {
+        border-color: currentColor;
+      }
       .theme-toggle:focus-visible {
         outline: 3px solid var(--focus-color);
         outline-offset: 4px;
       }
       @media (max-width: 480px) {
-        nav { gap: 12px; }
-        .nav { gap: 12px; }
-        .theme-toggle { width: 40px; height: 40px; }
+        nav {
+          gap: 12px;
+        }
+        .nav {
+          gap: 12px;
+        }
+        .theme-toggle {
+          width: 40px;
+          height: 40px;
+        }
+      }
+
+      /* Theme colours and rotations use separate properties from scroll motion. */
+      #name {
+        color: var(--name-color);
+      }
+      .theme-icon {
+        display: inline-flex;
+        transform: rotate(var(--icon-turn, 0deg));
+        transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .theme-icon {
+          transition: none;
+          transform: none;
+        }
+        .hero-block {
+          transition: none;
+          rotate: none;
+        }
+      }
+
+      /* Additional case-study platforms */
+      .platform-cin7 {
+        background: #00a6a6;
+        color: #ffffff;
+      }
+      .platform-netsuite {
+        background: #173f4f;
+        color: #ffffff;
+      }
+      .platform-oracle {
+        background: #c74634;
+        color: #ffffff;
+      }
+      .platform-radaro {
+        background: #ef4923;
+        color: #ffffff;
+      }
+      .platform-courseloop {
+        background: #1954ff;
+        color: #ffffff;
       }
     </style>
   </head>
@@ -710,9 +779,43 @@
         <nav aria-label="Primary">
           <a href="#work">Work</a><a href="#contact">Contact</a>
 
-          <button class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode">
-            <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z" /></svg>
-            <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" /></svg>
+          <button
+            class="theme-toggle"
+            type="button"
+            aria-label="Switch to dark mode"
+            aria-pressed="false"
+            title="Switch to dark mode"
+          >
+            <span class="theme-icon" aria-hidden="true">
+              <svg
+                class="moon-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path
+                  d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"
+                />
+              </svg>
+              <svg
+                class="sun-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="4" />
+                <path
+                  d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"
+                />
+              </svg>
+            </span>
           </button>
         </nav>
       </div>
@@ -863,7 +966,7 @@
               </div>
               <div class="project-copy">
                 <span class="role headline-eyebrow">Solution Architect</span>
-                <h4>Doing the impossible</h4>
+                <h4>Deploying the Impossible</h4>
                 <p>
                   Years of legacy development had been accumulated across
                   Betta’s commerce platform. Features had been stacked on top of
@@ -971,6 +1074,9 @@
                   <li class="platform-pill platform-sap">SAP</li>
                   <li class="platform-pill platform-salesforce">Salesforce</li>
                   <li class="platform-pill platform-moodle">Moodle</li>
+                  <li class="platform-pill platform-courseloop">CourseLoop</li>
+                  <li class="platform-pill platform-adobe">Adobe Campaign</li>
+                  <li class="platform-pill platform-azure">Azure</li>
                 </ul>
                 <ul class="results">
                   <li>
@@ -1056,6 +1162,8 @@
                   <li class="platform-pill platform-sap">SAP</li>
                   <li class="platform-pill platform-salesforce">Salesforce</li>
                   <li class="platform-pill platform-dotnet">.NET MAUI</li>
+                  <li class="platform-pill platform-oracle">Oracle</li>
+                  <li class="platform-pill platform-radaro">Radaro</li>
                 </ul>
                 <ul class="results">
                   <li><strong>100%</strong><span>increase in revenue</span></li>
@@ -1143,6 +1251,9 @@
                   <li class="platform-pill platform-azure">Azure</li>
                   <li class="platform-pill platform-storyblok">Storyblok</li>
                   <li class="platform-pill platform-salsify">Salsify</li>
+                  <li class="platform-pill platform-hubspot">HubSpot</li>
+                  <li class="platform-pill platform-cin7">CIN7 Core</li>
+                  <li class="platform-pill platform-netsuite">NetSuite</li>
                 </ul>
                 <ul class="results">
                   <li><strong>30</strong><span>countries reached</span></li>
@@ -1224,8 +1335,7 @@
                     ><span>signup time, down from 1 day</span>
                   </li>
                   <li>
-                    <strong>16 hours</strong
-                    ><span>weekly effort saved</span>
+                    <strong>16 hours</strong><span>weekly effort saved</span>
                   </li>
                 </ul>
               </div>
@@ -1405,18 +1515,24 @@
       // Switch themes and persist the visitor's choice when storage is available.
       (() => {
         const root = document.documentElement;
-        const toggle = document.querySelector('.theme-toggle');
+        const toggle = document.querySelector(".theme-toggle");
+        let themeTurns = 0;
         function updateToggle() {
-          const dark = root.dataset.theme === 'dark';
-          const label = dark ? 'Switch to light mode' : 'Switch to dark mode';
-          toggle.setAttribute('aria-label', label);
-          toggle.setAttribute('title', label);
-          toggle.setAttribute('aria-pressed', String(dark));
+          const dark = root.dataset.theme === "dark";
+          const label = dark ? "Switch to light mode" : "Switch to dark mode";
+          toggle.setAttribute("aria-label", label);
+          toggle.setAttribute("title", label);
+          toggle.setAttribute("aria-pressed", String(dark));
         }
-        toggle.addEventListener('click', () => {
-          const theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+        toggle.addEventListener("click", () => {
+          const theme = root.dataset.theme === "dark" ? "light" : "dark";
+          themeTurns += 1;
+          root.style.setProperty("--icon-turn", `${themeTurns * 360}deg`);
+          root.style.setProperty("--square-turn", `${themeTurns * 90}deg`);
           root.dataset.theme = theme;
-          try { localStorage.setItem('portfolio-theme', theme); } catch (_) {}
+          try {
+            localStorage.setItem("portfolio-theme", theme);
+          } catch (_) {}
           updateToggle();
         });
         updateToggle();
